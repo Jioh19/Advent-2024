@@ -45,7 +45,7 @@ func part1(nodes [][]int, lines []string, antenna map[byte]bool) int {
 			listAntenna := findNext(lines, lines[i][j])
 			fmt.Println(listAntenna)
 			antenna[lines[i][j]] = true
-			writeNodes(listAntenna, nodes)
+			writeNodes2(listAntenna, nodes)
 		}
 	}
 	for _, node := range nodes {
@@ -75,6 +75,35 @@ func writeNodes(listAntenna [][2]int, nodes [][]int) {
 
 		}
 	}
+}
+
+func writeNodes2(listAntenna [][2]int, nodes [][]int) {
+	fmt.Println("ENtramos")
+	max := len(listAntenna)
+	for i := 0; i < max-1; i++ {
+		for j := i + 1; j < max; j++ {
+
+			di := listAntenna[i][0] - listAntenna[j][0]
+			dj := listAntenna[i][1] - listAntenna[j][1]
+			x := listAntenna[i][0]
+			y := listAntenna[i][1]
+			nodes[x][y] = 1
+			for x+di >= 0 && x+di < len(nodes) && y+dj >= 0 && y+dj < len(nodes[0]) {
+				x += di
+				y += dj
+				nodes[x][y] = 1
+			}
+			x = listAntenna[j][0]
+			y = listAntenna[j][1]
+			nodes[x][y] = 1
+			for x-di >= 0 && x-di < len(nodes) && y-dj >= 0 && y-dj < len(nodes[0]) {
+				x -= di
+				y -= dj
+				nodes[x][y] = 1
+			}
+		}
+	}
+
 }
 
 func abs(x int) int {
