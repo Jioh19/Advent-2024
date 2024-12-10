@@ -16,7 +16,7 @@ func main() {
 	//fmt.Println(line)
 	results1 := part1(line)
 
-	fmt.Println(checksum(results1))
+	fmt.Println(part2(results1))
 }
 
 func part1(line []byte) []string {
@@ -47,6 +47,7 @@ func checksum(lines []string) int {
 				break
 			}
 		}
+		fmt.Println(lines)
 		for k, char := range lines {
 			if char == "." {
 				if len(lines)-1-i-j < k {
@@ -58,11 +59,56 @@ func checksum(lines []string) int {
 			}
 		}
 	}
-
 	for i, val := range lines {
 		num, _ := strconv.Atoi(string(val))
 		total += num * i
 	}
+	return total
+}
+
+func part2(lines []string) int {
+	total := 0
+
+	for i := len(lines) - 1; i > 0; i-- {
+		if lines[i] != "." {
+			size := 0
+			aux := i
+			for j := i - 1; j > 0; j-- {
+				if lines[j] != lines[i] {
+					size = i - j
+					i -= size
+					i++
+					break
+				}
+			}
+			//	fmt.Println("size", size, lines[i], i, aux)
+			space := 0
+			for k := 0; k < aux-size; k++ {
+				if lines[k] == "." {
+					space++
+				} else {
+					space = 0
+				}
+
+				if space == size && size > 0 {
+					//fmt.Println(size-1, k)
+					for l := size - 1; l >= 0; l-- {
+						lines[k-l], lines[aux-l] = lines[aux-l], lines[k-l]
+					}
+					break
+				}
+			}
+
+		}
+		//fmt.Println(i, lines)
+	}
+
+	for i, val := range lines {
+		num, _ := strconv.Atoi(string(val))
+		//	fmt.Println(i, val, num)
+		total += num * i
+	}
+	//fmt.Println(lines)
 	return total
 }
 
